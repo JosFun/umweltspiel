@@ -1,34 +1,29 @@
 package game;
 
+import observers.DisplaySizeSubject;
+
 import java.awt.Point;
 import java.awt.Color;
 import java.util.Objects;
-
 import javafx.geometry.Dimension2D;
 import javafx.scene.image.ImageView;
 import javafx.animation.Timeline;
 
-public abstract class Car {
-
-    Point position;
+public abstract class Car extends GraphicalObject {
     double velocity;
     Color color;
     EmissionClass exhaustType;
-    Dimension2D size;
-    ImageView texture;
     Timeline exhaust;
 
-
     public Car (Point start, double velocity, Color color, EmissionClass exhaustType,
-                Dimension2D size, ImageView texture, Timeline exhaust ) {
-        this.position = start;
+                double width, double height, DisplaySizeSubject displaySize,
+                String imagePath, Timeline exhaust ) {
+        super ( start, 200, 300, displaySize );
+        this.setTexture( imagePath );
         this.velocity = velocity;
         this.color = color;
         this.exhaustType = exhaustType;
-        this.size = size;
-        this.texture = texture;
         this.exhaust = exhaust;
-        System.out.println ("Hello");
     }
 
     @Override
@@ -43,15 +38,7 @@ public abstract class Car {
     public int hashCode() {
         return Objects.hash(exhaustType);
     }
-
-    public Point getPosition() {
-        return position;
-    }
-
-    public void setPosition(Point position) {
-        this.position = position;
-    }
-
+    /* Getters and Setters */
     public double getVelocity() {
         return velocity;
     }
@@ -70,9 +57,5 @@ public abstract class Car {
 
     public Dimension2D getSize() {
         return size;
-    }
-
-    public void setSize(Dimension2D size) {
-        this.size = size;
     }
 }
