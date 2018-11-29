@@ -2,12 +2,12 @@ package game;
 
 import observers.DisplaySizeSubject;
 
-import java.awt.Point;
 import java.awt.Color;
 import java.util.Objects;
 import javafx.geometry.Dimension2D;
 import javafx.scene.image.ImageView;
 import javafx.animation.Timeline;
+import javafx.geometry.Point2D;
 
 public abstract class Car extends GraphicalObject implements Textures{
     /* The native car width and height on a display sized 800 times 600 pixels. */
@@ -19,13 +19,9 @@ public abstract class Car extends GraphicalObject implements Textures{
     private Engine eng;
     private EnvBadge badge;
 
-    public Car (Point start, double velocity, EmissionClass exhaustType,
-                DisplaySizeSubject displaySize, String imagePath, Timeline exhaust ) {
+    public Car (Point2D start, double velocity, EmissionClass exhaustType,
+                DisplaySizeSubject displaySize ) {
         super ( start, NATIVE_CAR_WIDTH, NATIVE_CAR_HEIGHT, displaySize );
-
-        /* Set this car's texture. */
-        this.setTexture( imagePath );
-        this.exhaust = exhaust;
 
         /* Create this car's engine based on its emission class and its velocity. */
         this.eng = new Engine ( velocity, exhaustType );
@@ -39,6 +35,19 @@ public abstract class Car extends GraphicalObject implements Textures{
         }
         else {
             this.badge = new EnvBadge ( start, displaySize, EmissionClass.EMISSION_CLASS_RED );
+        }
+    }
+
+
+    void determineTexture ( ) {
+        if ( Math.random ( ) < 0.33 ) {
+            this.setTexture( TEXTURE_CAR_BROWN );
+        }
+        else if ( Math.random ( ) < 0.67 ) {
+            this.setTexture ( TEXTURE_CAR_GREY );
+        }
+        else {
+            this.setTexture( TEXTURE_CAR_WHITE );
         }
     }
 

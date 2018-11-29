@@ -4,9 +4,9 @@ import observers.DisplaySizeObserver;
 import observers.DisplaySizeSubject;
 import javafx.geometry.Dimension2D;
 import javafx.scene.image.Image;
-import java.awt.Point;
+import javafx.geometry.Point2D;
 
-public abstract class GraphicalObject extends DisplaySizeObserver {
+public abstract class GraphicalObject extends DisplaySizeObserver implements Textures {
     private static final double NATIVE_SCREEN_WIDTH = 800;
     private static final double NATIVE_SCREEN_HEIGHT = 600;
 
@@ -15,10 +15,10 @@ public abstract class GraphicalObject extends DisplaySizeObserver {
     /* The current size of the window, the object is currently being displayed on. */
     private DisplaySizeSubject displaySize;
 
-    Point position;
+    Point2D position;
     Dimension2D size;
 
-    public GraphicalObject (Point position, double width, double height, DisplaySizeSubject displaySize ) {
+    public GraphicalObject (Point2D position, double width, double height, DisplaySizeSubject displaySize ) {
         this.position = position;
         this.size = new Dimension2D ( width, height );
         /* DisplaySizeSubject shall notify this observer whenever the displaysize changes.*/
@@ -29,11 +29,11 @@ public abstract class GraphicalObject extends DisplaySizeObserver {
         this.update ( );
     }
 
-    public Point getPosition() {
+    public Point2D getPosition() {
         return position;
     }
 
-    public void setPosition(Point position) {
+    public void setPosition(Point2D position) {
         this.position = position;
     }
 

@@ -1,11 +1,14 @@
 package game;
 
+import javafx.geometry.Dimension2D;
 import observers.DisplaySizeSubject;
 
-import java.awt.*;
+import javafx.geometry.Point2D;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 
 /* The Environmental Badge*/
-public class EnvBadge extends GraphicalObject implements Textures{
+public class EnvBadge extends GraphicalObject implements Textures {
     private static final double NATIVE_BADGE_WIDTH = 100;
     private static final double NATIVE_BADGE_HEIGHT = 50;
 
@@ -13,9 +16,13 @@ public class EnvBadge extends GraphicalObject implements Textures{
 
     /* Every badge has a specific text on it.*/
     private String text;
-    public EnvBadge (Point position, DisplaySizeSubject displaySize, EmissionClass emission ) {
+    public EnvBadge (Point2D position, DisplaySizeSubject displaySize, EmissionClass emission ) {
         super ( position, NATIVE_BADGE_WIDTH, NATIVE_BADGE_HEIGHT, displaySize );
         this.emission = emission;
+        /* Whenever the mouse is clicked on this envbadge invoke the onClick method.*/
+        this.setOnMouseClicked ( ( e) -> {
+            this.onClick ( );
+        });
     }
 
     private void adaptTexture ( ) {
@@ -52,4 +59,6 @@ public class EnvBadge extends GraphicalObject implements Textures{
     public EmissionClass getEmission ( ) {
         return ( this.emission );
     }
+
+
 }

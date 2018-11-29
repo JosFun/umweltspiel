@@ -20,6 +20,18 @@ public class EnvGame extends Application {
         primary.show ( );
     }
 
+    public void updateScreen ( ) {
+
+    }
+
+    public void createTrees ( int amount ) {
+
+    }
+
+    public void createCar ( ) {
+
+    }
+
     public static void main ( String [ ] args ) {
         Application.launch ( args );
     }

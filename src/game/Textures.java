@@ -9,5 +9,5 @@ public interface Textures {
     String TEXTURE_PURPLE_BADGE = "";
     String TEXTURE_CAR_GREY = "";
     String TEXTURE_CAR_WHITE = "";
-    String TEXTUR_CAR_BROWN = "";
+    String TEXTURE_CAR_BROWN = "";
 }

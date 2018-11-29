@@ -1,12 +1,13 @@
 package game;
 
+import javafx.geometry.Point2D;
 import observers.DisplaySizeSubject;
 
 import java.awt.Point;
 
-public class Tree extends GraphicalObject implements Textures {
+public class Tree extends GraphicalObject {
 
-   public Tree (Point position, double width, double height, DisplaySizeSubject displaySize ) {
+   public Tree (Point2D position, double width, double height, DisplaySizeSubject displaySize ) {
       super ( position, width, height, displaySize );
       this.setTexture ( TEXTURE_TREE );
    }
