@@ -1,11 +1,14 @@
 package visual;
-
+/* JavaFX imports */
 import javafx.application.Application;
 import javafx.stage.*;
 import javafx.scene.layout.*;
 import javafx.scene.*;
 
-public class Display extends Application {
+public class EnvGame extends Application {
+    private final int FRAME_RATE = 25;
+    private final double MAX_WIDTH = 1400;
+    private final double MAX_HEIGHT = 1050;
 
     @Override
     public void start ( Stage primary ) {

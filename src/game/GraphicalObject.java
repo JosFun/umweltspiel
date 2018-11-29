@@ -7,8 +7,8 @@ import javafx.scene.image.Image;
 import java.awt.Point;
 
 public abstract class GraphicalObject extends DisplaySizeObserver {
-    private static final double NATIVE_WIDTH = 800;
-    private static final double NATIVE_HEIGHT = 600;
+    private static final double NATIVE_SCREEN_WIDTH = 800;
+    private static final double NATIVE_SCREEN_HEIGHT = 600;
 
     private String imagePath;
     private Image texture;
@@ -23,6 +23,10 @@ public abstract class GraphicalObject extends DisplaySizeObserver {
         this.size = new Dimension2D ( width, height );
         /* DisplaySizeSubject shall notify this observer whenever the displaysize changes.*/
         this.displaySize = displaySize;
+
+        /* Use the update method to initialize the width and height of this object by paying respect to the current
+        * display size. */
+        this.update ( );
     }
 
     public Point getPosition() {
@@ -53,11 +57,12 @@ public abstract class GraphicalObject extends DisplaySizeObserver {
         this.texture = new Image ( this.imagePath, this.getWidth ( ), this.getHeight ( ), false, false );
     }
 
-    /* Implement the update method for the observer. */
+    /* Implement the update method for the observer:
+     *      Whenever the displaySize attribute is changed, scale this graphical object */
     @Override
     public void update ( ) {
-        double newWidth = this.getWidth() * ( this.displaySize.getWidth( ) / NATIVE_WIDTH );
-        double newHeight = this.getHeight ( ) * ( this.displaySize.getHeight ( ) / NATIVE_HEIGHT );
+        double newWidth = this.getWidth() * ( this.displaySize.getWidth( ) / NATIVE_SCREEN_WIDTH );
+        double newHeight = this.getHeight ( ) * ( this.displaySize.getHeight ( ) / NATIVE_SCREEN_HEIGHT );
         this.size = new Dimension2D ( newWidth, newHeight );
         this.texture = new Image ( imagePath, newWidth, newHeight, false, false );
     }
