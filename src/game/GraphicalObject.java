@@ -4,7 +4,7 @@ import observers.DisplaySizeObserver;
 import observers.DisplaySizeSubject;
 import javafx.geometry.Dimension2D;
 import javafx.scene.image.Image;
-import javafx.geometry.Point2D;
+import javafx.geometry.*;
 
 public abstract class GraphicalObject extends DisplaySizeObserver implements Textures {
     private static final double NATIVE_SCREEN_WIDTH = 800;
@@ -25,6 +25,8 @@ public abstract class GraphicalObject extends DisplaySizeObserver implements Tex
         this.size = new Dimension2D ( width, height );
         /* DisplaySizeSubject shall notify this observer whenever the displaysize changes.*/
         this.displaySize = displaySize;
+        /* Add this graphical object to the displaySizes list of observers. */
+        this.displaySize.add ( this );
         /* use pythagoras for forced distance */
         this.forcedDistance = Math.sqrt ( Math.pow ( width, 2 ) + Math.pow ( height, 2 ));
 
@@ -60,7 +62,7 @@ public abstract class GraphicalObject extends DisplaySizeObserver implements Tex
     /* Change the image of this graphical object to the texture specified in the path. */
     public void setTexture ( String path ) {
         this.imagePath = path;
-        this.texture = new Image ( this.imagePath, this.getWidth ( ), this.getHeight ( ), false, false );
+        this.texture = new Image ( path, this.getWidth(), this.getHeight ( ), false, false  );
     }
 
     /* Implement the update method for the observer:

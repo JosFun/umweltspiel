@@ -9,6 +9,11 @@ public class DisplaySizeSubject {
     private double width;
     private double height;
 
+    public DisplaySizeSubject ( double width, double height ) {
+        this.width = width;
+        this.height = height;
+    }
+
     public void add ( DisplaySizeObserver o ) {
         this.obs.add ( o );
     }
