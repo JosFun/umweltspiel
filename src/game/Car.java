@@ -9,7 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.animation.Timeline;
 import javafx.geometry.Point2D;
 
-public abstract class Car extends GraphicalObject implements Textures{
+public abstract class Car extends GraphicalObject{
     /* The native car width and height on a display sized 800 times 600 pixels. */
     private static final double NATIVE_CAR_WIDTH = 100;
     private static final double NATIVE_CAR_HEIGHT = 50;
