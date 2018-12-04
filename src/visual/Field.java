@@ -3,7 +3,7 @@ package visual;
 import javafx.scene.canvas.*;
 import javafx.scene.image.Image;
 import observers.DisplaySizeSubject;
-import game.Textures;
+import game.*;
 
 public class Field extends Canvas {
     private DisplaySizeSubject sceneSize;
@@ -19,5 +19,10 @@ public class Field extends Canvas {
         Image background = new Image ( Textures.BACKGROUND_FIELD, this.getWidth(), this.getHeight(), false, false );
         GraphicsContext gc = this.getGraphicsContext2D();
         gc.drawImage( background, 0, 0, this.getWidth(), this.getHeight ( ));
+    }
+
+    public void drawObject ( GraphicalObject g ) {
+        GraphicsContext gc = this.getGraphicsContext2D();
+        gc.drawImage ( g.getTexture(), g.getPosition().getX(), g.getPosition( ).getY ( ) );
     }
 }

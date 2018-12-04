@@ -54,15 +54,28 @@ public class EnvGame extends Application {
         this.currentScene.widthProperty().addListener( obs -> {
             this.sceneSize.setWidth( this.currentScene.getWidth ( ));
             this.sceneSize.execute(); /* Notify all observers */
-            this.gameField.updateSize ( );
+            this.gameField.updateSize ( ); /* Update the size of the gameField. */
+            this.redrawObjects ( );
         });
         this.currentScene.heightProperty().addListener ( obs -> {
             this.sceneSize.setHeight ( this.currentScene.getHeight () );
             this.sceneSize.execute ();
             this.gameField.updateSize ( );
+            this.redrawObjects ( );
         });
 
+        /* Just to test whether the drawing mechanism of the objects even works.
+        * The creation of trees and cars will probably be implemented anywhere else later. */
+        this.createTrees( 5 );
         primary.show ( );
+    }
+
+    /* Redraw all the objects on the screen.
+    * Invoked because the width property or the height property of the scene has changed. */
+    public void redrawObjects ( ) {
+        for ( Tree t: this.trees ) {
+            this.gameField.drawObject( t );
+        }
     }
 
     public void updateScreen ( ) {
@@ -70,10 +83,12 @@ public class EnvGame extends Application {
     }
 
     public void createTrees ( int amount ) {
+        /* Just create a dummy object so we can calculate the current offset for the trees on the screen. */
+        double offset = 2 * new Tree ( new Point2D ( 0, 0 ), this.sceneSize ).getForcedDistance();
+
         for ( int i = 0; i < amount; ) {
             /* Since we do not want to have trees on the edge of the field, we take into account an offset when we
             * calculate the random positions for the trees. */
-            double offset = 2 * this.trees.get ( 0 ).getForcedDistance();
             Point2D rand = new Point2D ( ( this.currentScene.getWidth ( ) - offset ) * Math.random ( ) + 0.5 * offset ,
                    ( this.currentScene.getHeight ( ) - offset ) * Math.random ( ) + 0.5 * offset );
            boolean enoughDistance = true;
@@ -84,7 +99,8 @@ public class EnvGame extends Application {
                }
            }
            if ( enoughDistance ) {
-               this.trees.add ( new Tree ( rand, this.sceneSize ));
+               Tree t = new Tree ( rand, this.sceneSize );
+               this.trees.add ( t );
                ++i;
            }
         }

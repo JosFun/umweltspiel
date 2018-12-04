@@ -11,6 +11,6 @@ public class Tree extends GraphicalObject {
 
    public Tree (Point2D position, DisplaySizeSubject displaySize ) {
       super ( position, NATIVE_TREE_WIDTH, NATIVE_TREE_HEIGHT, displaySize );
-      this.setTexture ( TEXTURE_TREE );
+      this.setTexture (Textures.TEXTURE_TREE );
    }
 }
