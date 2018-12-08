@@ -8,7 +8,10 @@ public interface Textures {
     String TEXTURE_YELLOW_BADGE = "";
     String TEXTURE_RED_BADGE = "";
     String TEXTURE_PURPLE_BADGE = "";
-    String TEXTURE_CAR_GREY = "";
-    String TEXTURE_CAR_WHITE = "";
-    String TEXTURE_CAR_BROWN = "";
+    String TEXTURE_CAR_GREY = "/objects/car.png";
+    String TEXTURE_CAR_WHITE = "/objects/car.png";
+    String TEXTURE_CAR_BROWN = "/objects/car.png";
+    String TEXTURE_TOXIC_EXHAUST = "";
+    String TEXTURE_DIRTY_EXHAUST = "";
+    String TEXTURE_CLEAN_EXHAUST = "";
 }

@@ -6,18 +6,23 @@ import javafx.stage.*;
 import javafx.scene.layout.*;
 import javafx.scene.*;
 import javafx.geometry.Point2D;
+import javafx.event.*;
+import javafx.scene.input.MouseEvent;
 
 /* imports for the ArrayList */
 import java.util.ArrayList;
 import game.*;
 import observers.*;
 
-public class EnvGame extends Application {
+public class EnvGame extends Application implements EventHandler<MouseEvent> {
     private final int FRAME_RATE = 25;
     private final double MAX_WIDTH = 1400;
     private final double MAX_HEIGHT = 1050;
     /* The current score */
     private int score = 0;
+    /* The current initialization velocity.
+    * As the game goes on and on, this value will increase. */
+    private double currentInitV = 10;
 
     /* The cars in the game */
     private ArrayList<Car> cars = new ArrayList<> ( );
@@ -55,7 +60,7 @@ public class EnvGame extends Application {
             this.sceneSize.setWidth( this.currentScene.getWidth ( ));
             this.sceneSize.execute(); /* Notify all observers */
             this.gameField.updateSize ( ); /* Update the size of the gameField. */
-            this.redrawObjects ( );
+            this.redrawObjects ( ); /* Redraw all the objects on the screen. */
         });
         this.currentScene.heightProperty().addListener ( obs -> {
             this.sceneSize.setHeight ( this.currentScene.getHeight () );
@@ -66,7 +71,8 @@ public class EnvGame extends Application {
 
         /* Just to test whether the drawing mechanism of the objects even works.
         * The creation of trees and cars will probably be implemented anywhere else later. */
-        this.createTrees( 5 );
+        this.createTrees( 7 );
+        this.redrawObjects();
         primary.show ( );
     }
 
@@ -76,7 +82,17 @@ public class EnvGame extends Application {
         for ( Tree t: this.trees ) {
             this.gameField.drawObject( t );
         }
+        for ( Car c: this.cars ) {
+            this.gameField.drawObject ( c, c.getBadge(), c.getEngine ( ) );
+        }
     }
+
+   @Override
+   public void handle( MouseEvent m ){
+        /* Get origin of the mouseclick */
+        double x = m.getSceneX ( );
+        double y = m.getSceneY ( );
+   }
 
     public void updateScreen ( ) {
 
@@ -84,7 +100,7 @@ public class EnvGame extends Application {
 
     public void createTrees ( int amount ) {
         /* Just create a dummy object so we can calculate the current offset for the trees on the screen. */
-        double offset = 2 * new Tree ( new Point2D ( 0, 0 ), this.sceneSize ).getForcedDistance();
+        double offset = new Tree ( new Point2D ( 0, 0 ), this.sceneSize ).getForcedDistance();
 
         for ( int i = 0; i < amount; ) {
             /* Since we do not want to have trees on the edge of the field, we take into account an offset when we
@@ -107,6 +123,36 @@ public class EnvGame extends Application {
     }
 
     public void createCar ( ) {
+        double offset = new Euro2Car (0, 0, this.sceneSize ).getHeight();
+        double yRand = ( this.currentScene.getHeight ( ) - 2 * offset ) * Math.random ( );
+        /* Determine new random y coords if two cars interfere. */
+        boolean enoughDistance = true;
+        for ( int i = 0; i < this.cars.size() && enoughDistance; ++i ) {
+            if ( yRand - this.cars.get ( i ).getPosition ( ).getY() < 1.25 * offset ) {
+                enoughDistance = false;
+            }
+        }
+
+        if ( !enoughDistance ) {
+            /* Recursion */
+            createCar ( );
+            return;
+        }
+        /* Coordinates have been created randomly successfully.
+        * Now we have to determine the car's emission class. */
+        double rand = Math.random ( );
+        Car car;
+        if ( rand < 0.33 ) {
+            car = new Euro2Car( yRand, this.currentInitV, this.sceneSize );
+        }
+        else if ( rand < 0.67) {
+            car = new Euro3Car ( yRand, this.currentInitV, this.sceneSize );
+        }
+        else {
+            car = new Euro4Car ( yRand, this.currentInitV, this.sceneSize );
+        }
+
+        this.cars.add ( car );
 
     }
 

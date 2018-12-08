@@ -8,7 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
 /* The Environmental Badge*/
-public class EnvBadge extends GraphicalObject implements Textures {
+public class EnvBadge extends GraphicalObject {
     private static final double NATIVE_BADGE_WIDTH = 100;
     private static final double NATIVE_BADGE_HEIGHT = 50;
 
@@ -19,13 +19,15 @@ public class EnvBadge extends GraphicalObject implements Textures {
     public EnvBadge (Point2D position, DisplaySizeSubject displaySize, EmissionClass emission ) {
         super ( position, NATIVE_BADGE_WIDTH, NATIVE_BADGE_HEIGHT, displaySize );
         this.emission = emission;
+
         /* Whenever the mouse is clicked on this envbadge invoke the onClick method.*/
         this.setOnMouseClicked ( ( e) -> {
             this.onClick ( );
         });
     }
 
-    private void adaptTexture ( ) {
+    @Override
+    public void determineTexture ( ) {
         switch ( this.emission ) {
             case EMISSION_CLASS_GREEN:
                 this.setTexture( Textures.TEXTURE_GREEN_BADGE );
@@ -53,7 +55,7 @@ public class EnvBadge extends GraphicalObject implements Textures {
             this.emission = EmissionClass.EMISSION_CLASS_RED;
         }
         /* Last, adapt the badge's colour to the changed emission class*/
-        this.adaptTexture();
+        this.determineTexture();
     }
 
     public EmissionClass getEmission ( ) {

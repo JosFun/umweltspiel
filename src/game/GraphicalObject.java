@@ -42,7 +42,7 @@ public abstract class GraphicalObject extends DisplaySizeObserver implements Tex
         /* Add this graphical object to the displaySizes list of observers. */
         this.displaySize.add ( this );
         /* use pythagoras for forced distance */
-        this.forcedDistance = Math.sqrt ( Math.pow ( width, 2 ) + Math.pow ( height, 2 ));
+        this.determineTexture ( );
     }
 
     public Point2D getPosition() {
@@ -96,6 +96,9 @@ public abstract class GraphicalObject extends DisplaySizeObserver implements Tex
         /* use pythagoras for forced distance */
         this.forcedDistance = Math.sqrt ( Math.pow ( this.getWidth(), 2 ) + Math.pow ( this.getHeight(), 2 ));
     }
+
+    /* Invoked in the constructor of a graphical object at the very end of the initialization process.*/
+    public abstract void determineTexture ( );
 
 
 }

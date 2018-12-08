@@ -1,7 +1,9 @@
 package visual;
 
+import javafx.event.EventHandler;
 import javafx.scene.canvas.*;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import observers.DisplaySizeSubject;
 import game.*;
 
@@ -21,8 +23,10 @@ public class Field extends Canvas {
         gc.drawImage( background, 0, 0, this.getWidth(), this.getHeight ( ));
     }
 
-    public void drawObject ( GraphicalObject g ) {
-        GraphicsContext gc = this.getGraphicsContext2D();
-        gc.drawImage ( g.getTexture(), g.getPosition().getX(), g.getPosition( ).getY ( ) );
+    public void drawObject ( GraphicalObject... g ) {
+        for ( GraphicalObject obj: g ) {
+            GraphicsContext gc = this.getGraphicsContext2D();
+            gc.drawImage(obj.getTexture(), obj.getPosition().getX(), obj.getPosition().getY());
+        }
     }
 }
