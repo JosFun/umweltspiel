@@ -4,18 +4,30 @@ import javafx.geometry.Point2D;
 import observers.DisplaySizeSubject;
 
 public class Engine extends GraphicalObject {
-    private static final double NATIVE_EXHAUST_WIDTH = 20;
-    private static final double NATIVE_EXHAUST_HEIGHT = 10;
+    private static final double NATIVE_EXHAUST_WIDTH = 15;
+    private static final double NATIVE_EXHAUST_HEIGHT = 8;
 
     final double MAX_VELOCITY = 130;
 
-    private EmissionClass emission; /* This engine's EmissionClass. */
-    private double velocity; /* The current velocity of this engine. */
+    private EmissionClass emission = EmissionClass.EMISSION_CLASS_GREEN; /* This engine's EmissionClass. */
+    private double nativeVelocity; /* The native velocity of this engine when the screen is of native size. */
+    private double velocity; /* The actual velocity of this engine on the scaled screen. */
 
     public Engine (Point2D initPos, double v, EmissionClass e, DisplaySizeSubject displaySize) {
         super(initPos, NATIVE_EXHAUST_WIDTH, NATIVE_EXHAUST_HEIGHT, displaySize);
-        this.velocity = v;
+        this.nativeVelocity = v;
         this.emission = e;
+        this.determineTexture();
+        this.update ( );
+    }
+
+    /* Whenever the displaySizeSubject changes: Invoke the super method of the GraphicalObject type and
+    *  adapt velocity as well. */
+    @Override
+    public void update ( ){
+        super.update ( );
+        this.velocity = this.nativeVelocity * ( this.displaySize.getWidth( ) / GraphicalObject.NATIVE_SCREEN_WIDTH );
+
     }
 
     public EmissionClass getEmission() {
@@ -26,7 +38,10 @@ public class Engine extends GraphicalObject {
         return velocity;
     }
 
-    public void setVelocity ( double v ) {
+    public double getNativeVelocity ( ) {
+        return ( this.nativeVelocity );
+    }
+    public void setNativeVelocity ( double v ) {
         this.velocity = v;
     }
 

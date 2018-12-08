@@ -9,39 +9,40 @@ import javafx.event.EventHandler;
 
 /* The Environmental Badge*/
 public class EnvBadge extends GraphicalObject {
-    private static final double NATIVE_BADGE_WIDTH = 100;
-    private static final double NATIVE_BADGE_HEIGHT = 50;
+    private static final double NATIVE_BADGE_WIDTH = 30;
+    private static final double NATIVE_BADGE_HEIGHT = 30;
 
-    private EmissionClass emission;
+    private EmissionClass emission = null;
 
     /* Every badge has a specific text on it.*/
     private String text;
-    public EnvBadge (Point2D position, DisplaySizeSubject displaySize, EmissionClass emission ) {
+    public EnvBadge (Point2D position, DisplaySizeSubject displaySize ) {
         super ( position, NATIVE_BADGE_WIDTH, NATIVE_BADGE_HEIGHT, displaySize );
-        this.emission = emission;
 
-        /* Whenever the mouse is clicked on this envbadge invoke the onClick method.*/
-        this.setOnMouseClicked ( ( e) -> {
-            this.onClick ( );
-        });
     }
 
     @Override
     public void determineTexture ( ) {
-        switch ( this.emission ) {
-            case EMISSION_CLASS_GREEN:
-                this.setTexture( Textures.TEXTURE_GREEN_BADGE );
-                break;
-            case EMISSION_CLASS_YELLOW:
-                this.setTexture( Textures.TEXTURE_YELLOW_BADGE );
-                break;
-            case EMISSION_CLASS_RED:
-                this.setTexture( Textures.TEXTURE_RED_BADGE );
+        if (this.emission == null) {
+            double rand = Math.random();
+            if (rand < 0.33) this.emission = EmissionClass.EMISSION_CLASS_RED;
+            else if (rand < 0.67) this.emission = EmissionClass.EMISSION_CLASS_YELLOW;
+            else this.emission = EmissionClass.EMISSION_CLASS_GREEN;
         }
-    }
+            switch (this.emission) {
+                case EMISSION_CLASS_GREEN:
+                    this.setTexture(Textures.TEXTURE_GREEN_BADGE);
+                    break;
+                case EMISSION_CLASS_YELLOW:
+                    this.setTexture(Textures.TEXTURE_YELLOW_BADGE);
+                    break;
+                case EMISSION_CLASS_RED:
+                    this.setTexture(Textures.TEXTURE_RED_BADGE);
+            }
+        }
 
     /* Once you have clicked on the badge, its colour will change. */
-    private void onClick ( ) {
+    public void onClick ( ) {
         if ( this.emission == EmissionClass.EMISSION_CLASS_RED ) {
             this.emission = EmissionClass.EMISSION_CLASS_YELLOW;
             this.text = "EURO 2";

@@ -12,8 +12,8 @@ import javafx.scene.image.Image;
 
 public abstract class Car extends GraphicalObject{
     /* The native car width and height on a display sized 800 times 600 pixels. */
-    private static final double NATIVE_CAR_WIDTH = 100;
-    private static final double NATIVE_CAR_HEIGHT = 50;
+    private static final double NATIVE_CAR_WIDTH = 150;
+    private static final double NATIVE_CAR_HEIGHT = 80;
     private final double MAX_VELOCITY = 130;
 
     private Timeline exhaust;
@@ -25,19 +25,12 @@ public abstract class Car extends GraphicalObject{
         super ( start, NATIVE_CAR_WIDTH, NATIVE_CAR_HEIGHT, displaySize );
 
         /* Create this car's engine based on its emission class and its velocity. */
-        this.eng = new Engine ( new Point2D ( 0, this.getPosition ( ).getY ( )), velocity, exhaustType, displaySize );
+        this.eng = new Engine ( new Point2D ( 10, this.getPosition ( ).getY ( )+ 0.72 * NATIVE_CAR_HEIGHT ),
+                                velocity, exhaustType, displaySize );
 
-        /* Create this car's badge and determine its emission class randomly. */
-       double rand = Math.random ( );
-        if ( rand < 0.33 ) {
-            this.badge = new EnvBadge ( start, displaySize, EmissionClass.EMISSION_CLASS_GREEN );
-        }
-        else if ( rand < 0.67 ) {
-            this.badge = new EnvBadge ( start, displaySize, EmissionClass.EMISSION_CLASS_YELLOW );
-        }
-        else {
-            this.badge = new EnvBadge ( start, displaySize, EmissionClass.EMISSION_CLASS_RED );
-        }
+       /* Create this car's badge*/
+        this.badge = new EnvBadge ( new Point2D ( start.getX() + 0.2 * NATIVE_CAR_WIDTH ,
+                                    start.getY ( ) + 0.2 * NATIVE_CAR_HEIGHT ), displaySize );
     }
 
     @Override
@@ -55,13 +48,29 @@ public abstract class Car extends GraphicalObject{
     }
 
     public void updatePos ( double timeInterval) {
+        this.updateNativePos( timeInterval );
         double veloc = this.eng.getVelocity();
+        /* Don't forget to update the object's native positions as well. */
         this.setPosition ( new Point2D ( this.getPosition().getX ( ) + timeInterval * veloc,
                            this.getPosition ( ).getY ( ) ) );
+
         this.eng.setPosition( new Point2D ( this.eng.getPosition().getX ( ) + timeInterval * veloc,
-                              this.getPosition ( ).getY ( ) ) );
-        this.badge.setPosition ( new Point2D ( this.eng.getPosition ( ).getX ( ) + timeInterval * veloc,
+                              this.eng.getPosition ( ).getY ( ) ) );
+
+        this.badge.setPosition ( new Point2D ( this.badge.getPosition ( ).getX ( ) + timeInterval * veloc,
                                 this.badge.getPosition ( ).getY ( )) );
+    }
+
+    public void updateNativePos ( double timeInterval ) {
+        double veloc = this.eng.getNativeVelocity();
+        this.setNativePosition ( new Point2D ( this.getNativePosition().getX ( ) + timeInterval * veloc,
+                this.getNativePosition ( ).getY ( ) ) );
+
+        this.eng.setNativePosition( new Point2D ( this.eng.getNativePosition().getX ( ) + timeInterval * veloc,
+                this.eng.getNativePosition ( ).getY ( ) ) );
+
+        this.badge.setNativePosition ( new Point2D ( this.badge.getNativePosition ( ).getX ( ) + timeInterval * veloc,
+                this.badge.getNativePosition ( ).getY ( )) );
     }
     /* If this car's engine's emission class equals this car's badge's emissionclass: return true.
     *  Otherwise: The badge has been chosen wrongly. */

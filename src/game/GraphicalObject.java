@@ -7,13 +7,13 @@ import javafx.scene.image.Image;
 import javafx.geometry.*;
 
 public abstract class GraphicalObject extends DisplaySizeObserver implements Textures {
-    private static final double NATIVE_SCREEN_WIDTH = 800;
-    private static final double NATIVE_SCREEN_HEIGHT = 600;
+    static final double NATIVE_SCREEN_WIDTH = 800;
+    static final double NATIVE_SCREEN_HEIGHT = 600;
 
     private String imagePath;
     private Image texture;
     /* The current size of the window, the object is currently being displayed on. */
-    private DisplaySizeSubject displaySize;
+    DisplaySizeSubject displaySize;
 
     /* The current position and size of the object ( relatively to the current displaySize */
     Point2D position;
@@ -49,10 +49,13 @@ public abstract class GraphicalObject extends DisplaySizeObserver implements Tex
         return position;
     }
 
-    public void setPosition(Point2D position) {
+    public void setPosition ( Point2D position ) {
         this.position = position;
     }
-
+    /* Return the nativePosition of the graphical object. */
+    public Point2D getNativePosition ( ) { return ( this.nativePosition );}
+    /* Update the native Position of this object. */
+    public void setNativePosition ( Point2D nativePosition ) { this.nativePosition = nativePosition; }
     public double getWidth() {
         return ( this.size.getWidth() );
     }
