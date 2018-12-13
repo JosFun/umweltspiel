@@ -29,6 +29,8 @@ public class EnvGame extends Application implements EventHandler<MouseEvent> {
     * As the game goes on and on, this will value will increase. */
     private double currentCarSpawnInterval = 3;
 
+    /* The native yPositions on which cars can be created. */
+    private double [ ] ySlots;
     /* The cars in the game */
     private ArrayList<Car> cars = new ArrayList<> ( );
     /* The trees in the game */
@@ -77,6 +79,8 @@ public class EnvGame extends Application implements EventHandler<MouseEvent> {
             this.gameField.updateSize ( );
             this.redrawObjects ( );
         });
+        /* Determine slots ( ypositions ) on which graphical objects can be created:*/
+        this.determineSlots ( );
         /* Create the gameLoop and visualize the application afterwards. */
         this.gameLoop = new EnvGame.Timer ( System.nanoTime());
         this.gameLoop.start ( );
@@ -106,51 +110,58 @@ public class EnvGame extends Application implements EventHandler<MouseEvent> {
             EnvBadge b = c.getBadge();
             Point2D badgeCenter = new Point2D ( b.getPosition ( ).getX ( ) + 0.5 * b.getWidth(),
                                                 b.getPosition ( ).getY ( ) + 0.5 * b.getHeight ( ) );
-            if ( badgeCenter.distance ( new Point2D ( x, y )) <= 0.75 * b.getWidth() ) {
+            if ( badgeCenter.distance ( new Point2D ( x, y )) <= b.getWidth() ) {
                 b.onClick ( );
                 this.redrawObjects();
             }
         }
    }
 
-    public void createTrees ( int amount ) {
-        /* Just create a dummy object so we can calculate the current offset for the trees on the screen. */
-        double offset = new Tree ( new Point2D ( 0, 0 ), this.sceneSize ).getForcedDistance();
+   public void determineSlots ( ) {
+       /* Just create a dummy object so we can calculate the current offset for the trees on the screen. */
+       double offset = new Tree ( new Point2D ( 0, 0 ), this.sceneSize ).getForcedDistance();
+       int slots = ( int ) ( this.currentScene.getHeight (  )/ offset );
+       this.ySlots = new double [ slots ];
+       for ( int i = 0; i < slots; ++i ) {
+           this.ySlots [ i ] = i * offset;
+       }
+   }
 
-        for ( int i = 0; i < amount; ) {
-            /* Since we do not want to have trees on the edge of the field, we take into account an offset when we
-            * calculate the random positions for the trees. */
-            Point2D rand = new Point2D ( ( this.currentScene.getWidth ( ) - offset ) * Math.random ( ) + 0.5 * offset ,
-                   ( this.currentScene.getHeight ( ) - offset ) * Math.random ( ) + 0.5 * offset );
-           boolean enoughDistance = true;
-           for ( int j = 0; j < this.trees.size() && enoughDistance; ++j ) {
-               Tree t = this.trees.get ( j );
-               if ( rand.distance ( t.getPosition() ) < t.getForcedDistance() ) {
-                   enoughDistance = false;
-               }
-           }
-           if ( enoughDistance ) {
-               Tree t = new Tree ( rand, this.sceneSize );
-               this.trees.add ( t );
-               ++i;
-           }
+    public void createTrees ( int amount ) {
+        /* For each of the tress you want to create: Determine a slot ( yPos ) and a completely random xPos. */
+        for ( int i = 0; i < amount;  ) {
+            double offset = this.ySlots [ 0 ];
+            int slotNum = ( int ) ( this.ySlots.length * Math.random ( ) );
+            double xCoord =  ( this.currentScene.getWidth ( ) - offset ) * Math.random ( );
+            Point2D rand = new Point2D ( xCoord, this.ySlots [ slotNum ]);
+
+
+            /* Create new tree until it is far enough form all the other trees having been created so far. */
+            boolean enoughDistance = true;
+            for ( int j = 0; j <this.trees.size ( ) && enoughDistance; ++j ) {
+                Tree t = this.trees.get ( j );
+                if ( rand.distance ( t.getPosition() ) < t.getForcedDistance() ) {
+                    enoughDistance = false;
+                }
+            }
+
+            if ( enoughDistance ) {
+                Tree t = new Tree(rand, this.sceneSize);
+                this.trees.add(t);
+                ++i;
+            }
         }
     }
 
     public void createCar ( ) {
-        double offset = new Euro2Car (0, 0, this.sceneSize ).getHeight();
-        double yRand = ( this.currentScene.getHeight ( ) - 2 * offset ) * Math.random ( );
+        double yRand = this.ySlots [ ( int ) ( this.ySlots.length * Math.random ( ) ) ];
         /* Determine new random y coords if two cars interfere. */
         boolean enoughDistance = true;
-        for ( int i = 0; i < this.cars.size() && enoughDistance; ++i ) {
-            if ( Math.abs ( yRand - this.cars.get ( i ).getPosition ( ).getY() ) < 1.25 * offset ) {
-                enoughDistance = false;
-            }
-        }
+
 
         if ( !enoughDistance ) {
             /* Recursion */
-            createCar ( );
+            this.createCar ( );
             return;
         }
         /* Coordinates have been created randomly successfully.
@@ -196,7 +207,7 @@ public class EnvGame extends Application implements EventHandler<MouseEvent> {
         Timer ( long nanoTimeStart ) {
             super ( );
             this.startTime = nanoTimeStart;
-            createTrees( 7 );
+            createTrees( 20 );
             createCar ( );
             redrawObjects ( );
         }
@@ -211,7 +222,6 @@ public class EnvGame extends Application implements EventHandler<MouseEvent> {
                 /* If the car has just left the field: Evaluate it. */
                 evaluate ( c );
             }
-            System.out.println ( t );
             if ( t >= currentCarSpawnInterval ) {
                 /* Flip a coin on whether or not to create a car if enough time has passed since the last creation. */
                 if ( Math.random ( ) > 0.5 ) {

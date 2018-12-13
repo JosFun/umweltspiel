@@ -13,7 +13,7 @@ import javafx.scene.image.Image;
 public abstract class Car extends GraphicalObject{
     /* The native car width and height on a display sized 800 times 600 pixels. */
     private static final double NATIVE_CAR_WIDTH = 150;
-    private static final double NATIVE_CAR_HEIGHT = 80;
+    private static final double NATIVE_CAR_HEIGHT = 75;
     private final double MAX_VELOCITY = 130;
 
     private Timeline exhaust;
@@ -25,12 +25,12 @@ public abstract class Car extends GraphicalObject{
         super ( start, NATIVE_CAR_WIDTH, NATIVE_CAR_HEIGHT, displaySize );
 
         /* Create this car's engine based on its emission class and its velocity. */
-        this.eng = new Engine ( new Point2D ( 10, this.getPosition ( ).getY ( )+ 0.72 * NATIVE_CAR_HEIGHT ),
+        this.eng = new Engine ( new Point2D ( 0, this.getNativePosition ( ).getY ( )+ 0.6 * NATIVE_CAR_HEIGHT ),
                                 velocity, exhaustType, displaySize );
 
        /* Create this car's badge*/
-        this.badge = new EnvBadge ( new Point2D ( start.getX() + 0.2 * NATIVE_CAR_WIDTH ,
-                                    start.getY ( ) + 0.2 * NATIVE_CAR_HEIGHT ), displaySize );
+        this.badge = new EnvBadge ( new Point2D ( start.getX() + 0.45 * NATIVE_CAR_WIDTH ,
+                                    start.getY ( ) + 0.5 * NATIVE_CAR_HEIGHT ), displaySize );
     }
 
     @Override

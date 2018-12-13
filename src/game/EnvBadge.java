@@ -9,8 +9,8 @@ import javafx.event.EventHandler;
 
 /* The Environmental Badge*/
 public class EnvBadge extends GraphicalObject {
-    private static final double NATIVE_BADGE_WIDTH = 30;
-    private static final double NATIVE_BADGE_HEIGHT = 30;
+    private static final double NATIVE_BADGE_WIDTH = 25;
+    private static final double NATIVE_BADGE_HEIGHT = 25;
 
     private EmissionClass emission = null;
 

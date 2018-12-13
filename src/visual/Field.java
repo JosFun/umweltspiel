@@ -7,6 +7,7 @@ import javafx.scene.input.MouseEvent;
 import observers.DisplaySizeSubject;
 import game.*;
 
+/* The Field of the game on which all the cars and trees are drawn. */
 public class Field extends Canvas {
     private DisplaySizeSubject sceneSize;
     private Image background;
@@ -15,7 +16,7 @@ public class Field extends Canvas {
         this.sceneSize = sceneSize;
         this.updateSize ( );
     }
-
+    /* Update the size of this field according to the size of the screen it has been created on. */
     public void updateSize ( ) {
         this.setHeight ( this.sceneSize.getHeight() );
         this.setWidth ( this.sceneSize.getWidth () );
@@ -24,6 +25,7 @@ public class Field extends Canvas {
         gc.drawImage( this.background, 0, 0, this.getWidth(), this.getHeight ( ));
     }
 
+    /* Draw the objects specified by g [ ]*/
     public void drawObject ( GraphicalObject... g ) {
         GraphicsContext gc = this.getGraphicsContext2D();
         for ( GraphicalObject obj: g ) {

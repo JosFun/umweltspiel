@@ -4,8 +4,8 @@ import javafx.geometry.Point2D;
 import observers.DisplaySizeSubject;
 
 public class Engine extends GraphicalObject {
-    private static final double NATIVE_EXHAUST_WIDTH = 15;
-    private static final double NATIVE_EXHAUST_HEIGHT = 8;
+    private static final double NATIVE_EXHAUST_WIDTH = 30;
+    private static final double NATIVE_EXHAUST_HEIGHT = 15;
 
     final double MAX_VELOCITY = 130;
 
@@ -45,6 +45,7 @@ public class Engine extends GraphicalObject {
         this.velocity = v;
     }
 
+    /* Determine the texture of this engine according to its emissionclass. */
     @Override
     public void determineTexture ( ) {
         if (this.emission == EmissionClass.EMISSION_CLASS_RED) {
