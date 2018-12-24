@@ -12,4 +12,5 @@ public interface Textures {
     String TEXTURE_TOXIC_EXHAUST = "/objects/toxic_exhaust.png";
     String TEXTURE_DIRTY_EXHAUST = "/objects/dirty_exhaust.png";
     String TEXTURE_CLEAN_EXHAUST = "/objects/clean_exhaust.png";
+    String TEXTURE_LIFE = "/objects/life.png";
 }

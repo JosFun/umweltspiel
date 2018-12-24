@@ -3,6 +3,7 @@ package visual;
 import javafx.event.EventHandler;
 import javafx.scene.canvas.*;
 import javafx.scene.image.Image;
+import javafx.scene.text.*;
 import javafx.scene.input.MouseEvent;
 import observers.DisplaySizeSubject;
 import game.*;
@@ -31,6 +32,17 @@ public class Field extends Canvas {
         for ( GraphicalObject obj: g ) {
             gc.drawImage(obj.getTexture(), obj.getPosition().getX(), obj.getPosition().getY());
         }
+    }
+
+    /* Draw the current score on the screen. */
+    public void drawScore ( Score score ) {
+        GraphicsContext gc = this.getGraphicsContext2D( );
+        gc.setFont ( new Font( score.getFontSize() ));
+        System.out.println ( score.getFontSize ( ));
+        System.out.println ( score.getXPos());
+        System.out.println ( score.getYPos ( ) );
+
+        gc.fillText ( Integer.toString ( score.getScore ( ) ), score.getXPos(), score.getYPos() );
     }
 
     /* Prime the canvas with its background. */

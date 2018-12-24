@@ -16,12 +16,14 @@ import game.*;
 import observers.*;
 
 public class EnvGame extends Application implements EventHandler<MouseEvent> {
+    private static final double NATIVE_WIDTH = 800;
+    private static final double NATIVE_HEIGHT = 600;
     private final int FRAME_RATE = 25;
     private final double MAX_WIDTH = 1400;
     private final double MAX_HEIGHT = 1050;
     /* The current score */
-    private int score = 0;
-    private int lifes = 0;
+    private Score score;
+    private ArrayList<Life> lifes = new ArrayList<> ( );
     /* The current initialization velocity.
     * As the game goes on and on, this value will increase. */
     private double currentInitV = 10;
@@ -55,7 +57,7 @@ public class EnvGame extends Application implements EventHandler<MouseEvent> {
         primary.setTitle ( "Umweltplakettenspiel" );
 
         this.root = new Group ( );
-        this.currentScene = new Scene ( root, 800, 600 );
+        this.currentScene = new Scene ( root,NATIVE_WIDTH, NATIVE_HEIGHT );
         primary.setScene ( this.currentScene );
 
         /* Create displaySizeSubject which keeps track of the size of this scene */
@@ -87,19 +89,35 @@ public class EnvGame extends Application implements EventHandler<MouseEvent> {
         primary.show ( );
     }
 
+    /* End the game */
+    private void endGame ( ) {
+        if ( GameOver.showGameOver() == false ) {
+            Platform.exit ( );
+        }
+    }
     /* Redraw all the objects on the screen.
     * Invoked because the width property or the height property of the scene has changed. */
     public void redrawObjects ( ) {
+        /* Prime the canvas first */
         this.gameField.primeCanvas ( );
+        /* Afterwards draw all the cars */
         for ( Car c: this.cars ) {
             this.gameField.drawObject ( c.getEngine ( ), c, c.getBadge( ) );
         }
-
+        /* Then draw all the trees in the game. */
         for ( Tree t: this.trees ) {
             this.gameField.drawObject( t );
         }
+        /* Don't forget the lifes of the player */
+        for ( Life l: this.lifes ) {
+            this.gameField.drawObject( l );
+        }
+
+        /* Last draw the current score */
+        this.gameField.drawScore( this.score );
     }
 
+    /* Handle MouseEveent*/
    @Override
    public void handle( MouseEvent m ){
         /* Get origin of the mouseclick */
@@ -127,6 +145,11 @@ public class EnvGame extends Application implements EventHandler<MouseEvent> {
        }
    }
 
+   private void initLifes ( ) {
+       for ( int i = 0; i < 3; ++i ) {
+           this.lifes.add(new Life(new Point2D(NATIVE_WIDTH * ( 0.95 - 0.05 * i ), NATIVE_HEIGHT * 0.05), this.sceneSize));
+       }
+   }
     public void createTrees ( int amount ) {
         /* For each of the tress you want to create: Determine a slot ( yPos ) and a completely random xPos. */
         for ( int i = 0; i < amount;  ) {
@@ -153,7 +176,7 @@ public class EnvGame extends Application implements EventHandler<MouseEvent> {
         }
     }
 
-    public void createCar ( ) {
+    private void createCar ( ) {
         double yRand = this.ySlots [ ( int ) ( this.ySlots.length * Math.random ( ) ) ];
         /* Determine new random y coords if two cars interfere. */
         boolean enoughDistance = true;
@@ -189,11 +212,11 @@ public class EnvGame extends Application implements EventHandler<MouseEvent> {
             cars.remove ( c );
             /* If badge has been set correctly: Player receives some points!*/
             if ( c.checkBadge() ) {
-                score += 20;
+                this.score.incScore( 20 );
             }
             /* Otherwise he will lose a life!*/
             else {
-                lifes -= 1;
+                this.lifes.remove ( this.lifes.size ( ) - 1 );
             }
         }
     }
@@ -204,11 +227,14 @@ public class EnvGame extends Application implements EventHandler<MouseEvent> {
         private static final double interval = 16.67*10e-3;
         private long startTime;
 
+        /* Initialization of the game components. */
         Timer ( long nanoTimeStart ) {
             super ( );
             this.startTime = nanoTimeStart;
             createTrees( 20 );
             createCar ( );
+            initLifes();
+            score = new Score ( 0, sceneSize ); /* Create score */
             redrawObjects ( );
         }
 
@@ -222,13 +248,17 @@ public class EnvGame extends Application implements EventHandler<MouseEvent> {
                 /* If the car has just left the field: Evaluate it. */
                 evaluate ( c );
             }
+
+            if ( lifes.isEmpty() ) {
+                endGame ( );
+            }
             if ( t >= currentCarSpawnInterval ) {
                 /* Flip a coin on whether or not to create a car if enough time has passed since the last creation. */
                 if ( Math.random ( ) > 0.5 ) {
                     createCar();
                     /* Reset startTime afterwards. */
                     this.startTime = currentNanoTime;
-                    currentCarSpawnInterval -= 0.05;
+                    currentCarSpawnInterval -= 0.01;
                 }
             }
 

@@ -12,7 +12,7 @@ public class EnvBadge extends GraphicalObject {
     private static final double NATIVE_BADGE_WIDTH = 25;
     private static final double NATIVE_BADGE_HEIGHT = 25;
 
-    private EmissionClass emission = null;
+    private EmissionClass emission;
 
     /* Every badge has a specific text on it.*/
     private String text;
@@ -25,10 +25,21 @@ public class EnvBadge extends GraphicalObject {
     public void determineTexture ( ) {
         if (this.emission == null) {
             double rand = Math.random();
-            if (rand < 0.33) this.emission = EmissionClass.EMISSION_CLASS_RED;
-            else if (rand < 0.67) this.emission = EmissionClass.EMISSION_CLASS_YELLOW;
-            else this.emission = EmissionClass.EMISSION_CLASS_GREEN;
+            if (rand < 0.33) {
+                this.emission = EmissionClass.EMISSION_CLASS_RED;
+                System.out.println ( "Red Car" );
+            }
+            else if (rand < 0.67) {
+                this.emission = EmissionClass.EMISSION_CLASS_YELLOW;
+                System.out.println ( "Yellow Car");
+            }
+            else {
+                this.emission = EmissionClass.EMISSION_CLASS_GREEN;
+                System.out.println ( "Green Car");
+            }
         }
+
+        if ( this.emission == null ) System.out.println ( "null ptr" );
             switch (this.emission) {
                 case EMISSION_CLASS_GREEN:
                     this.setTexture(Textures.TEXTURE_GREEN_BADGE);
@@ -38,6 +49,9 @@ public class EnvBadge extends GraphicalObject {
                     break;
                 case EMISSION_CLASS_RED:
                     this.setTexture(Textures.TEXTURE_RED_BADGE);
+                    break;
+                default:
+                    System.out.println ( "Error" );
             }
         }
 
@@ -51,7 +65,7 @@ public class EnvBadge extends GraphicalObject {
             this.emission = EmissionClass.EMISSION_CLASS_GREEN;
             this.text = "EURO 3";
         }
-        else {
+        else if ( this.emission == EmissionClass.EMISSION_CLASS_GREEN) {
             this.text = "EURO 4";
             this.emission = EmissionClass.EMISSION_CLASS_RED;
         }
@@ -60,6 +74,7 @@ public class EnvBadge extends GraphicalObject {
     }
 
     public EmissionClass getEmission ( ) {
+        System.out.println ( this.emission );
         return ( this.emission );
     }
 

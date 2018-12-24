@@ -31,7 +31,7 @@ public class Engine extends GraphicalObject {
     }
 
     public EmissionClass getEmission() {
-        return emission;
+        return this.emission;
     }
 
     public double getVelocity() {
