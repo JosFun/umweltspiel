@@ -18,7 +18,6 @@ import observers.*;
 public class EnvGame extends Application implements EventHandler<MouseEvent> {
     private static final double NATIVE_WIDTH = 800;
     private static final double NATIVE_HEIGHT = 600;
-    private final int FRAME_RATE = 25;
     private final double MAX_WIDTH = 1400;
     private final double MAX_HEIGHT = 1050;
     /* The current score */
@@ -39,6 +38,7 @@ public class EnvGame extends Application implements EventHandler<MouseEvent> {
     private ArrayList<Tree> trees = new ArrayList<> ( );
 
     /* Anything related to the grapical representation of the game */
+    private Stage stage;
     private Scene currentScene;
     private Group root;
     private Field gameField;
@@ -54,6 +54,7 @@ public class EnvGame extends Application implements EventHandler<MouseEvent> {
         if ( Menu.displayMenu() == false ) {
             Platform.exit ( );
         }
+        this.stage = primary;
         primary.setTitle ( "Umweltplakettenspiel" );
 
         this.root = new Group ( );
@@ -91,9 +92,15 @@ public class EnvGame extends Application implements EventHandler<MouseEvent> {
 
     /* End the game */
     private void endGame ( ) {
-        if ( GameOver.showGameOver() == false ) {
-            Platform.exit ( );
-        }
+        this.gameLoop.stop();
+        this.gameLoop = null;
+
+        this.score.setScore( 0 );
+        this.gameField.primeCanvas();
+        this.cars = new ArrayList<Car> ( );
+        this.trees = new ArrayList<Tree> ( );
+        this.lifes = new ArrayList<Life> ( );
+        this.start ( stage );
     }
     /* Redraw all the objects on the screen.
     * Invoked because the width property or the height property of the scene has changed. */
@@ -224,7 +231,7 @@ public class EnvGame extends Application implements EventHandler<MouseEvent> {
     /* Private inner class to create a timeline.
      * The handle method is invoked by the framework 60 times per second.  */
     private class Timer extends AnimationTimer {
-        private static final double interval = 16.67*10e-3;
+        private static final double interval = 16.67 * 10e-3;
         private long startTime;
 
         /* Initialization of the game components. */

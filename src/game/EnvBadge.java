@@ -27,19 +27,15 @@ public class EnvBadge extends GraphicalObject {
             double rand = Math.random();
             if (rand < 0.33) {
                 this.emission = EmissionClass.EMISSION_CLASS_RED;
-                System.out.println ( "Red Car" );
             }
             else if (rand < 0.67) {
                 this.emission = EmissionClass.EMISSION_CLASS_YELLOW;
-                System.out.println ( "Yellow Car");
             }
             else {
                 this.emission = EmissionClass.EMISSION_CLASS_GREEN;
-                System.out.println ( "Green Car");
             }
         }
 
-        if ( this.emission == null ) System.out.println ( "null ptr" );
             switch (this.emission) {
                 case EMISSION_CLASS_GREEN:
                     this.setTexture(Textures.TEXTURE_GREEN_BADGE);
@@ -50,8 +46,6 @@ public class EnvBadge extends GraphicalObject {
                 case EMISSION_CLASS_RED:
                     this.setTexture(Textures.TEXTURE_RED_BADGE);
                     break;
-                default:
-                    System.out.println ( "Error" );
             }
         }
 
@@ -74,7 +68,6 @@ public class EnvBadge extends GraphicalObject {
     }
 
     public EmissionClass getEmission ( ) {
-        System.out.println ( this.emission );
         return ( this.emission );
     }
 

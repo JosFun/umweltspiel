@@ -38,7 +38,7 @@ public class Menu {
 
         Scene content = new Scene ( layout );
         menu.setScene ( content );
-        menu.showAndWait();
+        menu.showAndWait(); /* Works because control is passed over to this class. */
 
         return ( Menu.answer );
     }

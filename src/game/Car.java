@@ -75,8 +75,6 @@ public abstract class Car extends GraphicalObject{
     /* If this car's engine's emission class equals this car's badge's emissionclass: return true.
     *  Otherwise: The badge has been chosen wrongly. */
     public boolean checkBadge ( ) {
-        System.out.println ( this.eng.getEmission() );
-        System.out.println ( this.badge.getEmission ( ));
         return ( this.eng.getEmission() == this.badge.getEmission());
     }
 
